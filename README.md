@@ -30,16 +30,50 @@ Graduation target on this deployment is 0.4 HYPE, with 0.1 HYPE reserved for the
 
 - Graduation is on-chain; HyperCore HIP-1 listing is signed by a keeper EOA (`coreSettler`) until a CoreWriter path exists — the keeper has custody after bridge claim.
 - Elysium → HyperEVM withdrawals are optimistic (challenge period before Outbox claim).
-- Ticker cost is funded by the curve (`tickerBudget`); keeper never tops up.
+- Ticker cost is funded by the curve (`tickerBudget`); the keeper never tops up.
 
 See `SPEC.md`, `docs/BRIDGE_NOTES.md`, and `docs/STATUS.md` for the full mechanism, bridge notes, and live testnet status.
 
-## Development
+## Stack
+
+| Item | Value |
+| --- | --- |
+| Tooling | Foundry |
+| Solidity | 0.8.28 |
+| EVM | cancun |
+| Libraries | forge-std, solady |
+
+## Getting started
+
+### Prerequisites
+
+- [Foundry](https://book.getfoundry.sh/)
+- Populate `lib/` via git submodules before building
+
+### Build and test
 
 ```bash
-# Foundry — populate lib/ via git submodules when building
-forge test
 forge build
+forge test
 ```
 
-Solidity `0.8.28`, EVM cancun, Foundry profiles in `foundry.toml`.
+Profiles, fuzz, and invariant settings live in `foundry.toml`.
+
+## Layout
+
+| Path | Role |
+| --- | --- |
+| `src/` | Core contracts and interfaces |
+| `test/` | Foundry unit, fuzz, and invariant tests |
+| `script/` | Deploy scripts |
+| `deployments/` | Address manifests |
+| `abi/` | Exported ABIs |
+| `docs/` | Status and bridge notes |
+| `ops/` | Operational helpers |
+| `SPEC.md` | Mechanism specification |
+
+## Security
+
+- Testnet research only; not audited for mainnet.
+- Keeper custody after bridge claim is an explicit trust assumption until CoreWriter lands.
+- Never commit private keys or broadcast without reviewing the dry-run output.
